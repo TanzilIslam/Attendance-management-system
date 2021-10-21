@@ -1,4 +1,4 @@
-# Nuxt-Firebase-Authentication
+# Attendance Management System Nuxt + firebase
 
 ## Build Setup
 
