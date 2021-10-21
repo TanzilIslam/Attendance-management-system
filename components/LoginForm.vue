@@ -44,7 +44,7 @@
           </v-card-text>
           <v-card-actions class="pb-4 ">
             <v-btn
-            :loading="loading"
+              :loading="loading"
               block
               width="240"
               :disabled="!valid"
@@ -56,6 +56,9 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar :color="snackbarColor" v-model="showSnackbar" top centered>
+      <div class="text-center">{{ snackbarText }}</div>
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -73,10 +76,13 @@ export default {
       required: value => !!value || "Password is Required",
       min: v => (v && v.length >= 8) || "Min 8 characters"
     },
-    loading:false,
+    loading: false,
+    showSnackbar: false,
+    snackbarColor: "error",
+    snackbarText: "User Not Found"
   }),
   methods: {
-   async login() {
+    async login() {
       let self = this;
       if (this.$refs.loginForm.validate()) {
         self.loading = true;
@@ -85,21 +91,21 @@ export default {
           password: this.password
         };
 
-       await this.$store
+        await this.$store
           .dispatch("users/login", userInfo)
           .then(e => {
-            // console.log(userInfo);
-            self.loading = false;
+            if (e == "User Not Found") {
+              self.showSnackbar = true;
+            } else {
+              console.log("fond");
+            }
           })
           .catch(e => {
-            self.alert = true;
-            self.alertColor = "error";
-            self.alertText = e.code;
+            self.showSnackbar = true;
           });
-          self.loading = false;
+        self.loading = false;
       }
     }
-  },
-  
+  }
 };
 </script>

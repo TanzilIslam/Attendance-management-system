@@ -6,7 +6,7 @@ import Cookie from "js-cookie";
 export const state = () => ({
   user: null,
   userInfo: {},
-  UserList : []
+  UserList: []
 });
 export const mutations = {
   SET_USER(state, userInfo) {
@@ -17,19 +17,38 @@ export const mutations = {
   },
   GET_LIST(state, category) {
     state.UserList = category;
-  },
+  }
 };
 
 export const actions = {
   async login({ commit }, userInfo) {
-    const allUsers = db.collection("users");
-    const snapshot = await allUsers.get();
-     snapshot.forEach(doc => {
-      console.log(doc.data());
+    return await new Promise((resolve, reject) => {
+      db.collection("users")
+        .where("email", "==", userInfo.email)
+        .where("password", "==", userInfo.password)
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.empty) {
+            resolve("User Not Found");
+          } else {
+            let user = null;
+            querySnapshot.forEach(doc => {
+              user = {
+                ...doc.data(),
+                id: doc.id
+              };
+            });
+            resolve(user);
+            const { email, uid } = user;
+            Cookie.set("uid", user.id);
+            commit("SET_USER", { email, uid });
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
-    //  return new Promise((resolve, reject) => {
-       
-    //  });
+
     // try {
     //   await auth.signInWithEmailAndPassword(userInfo.email, userInfo.password);
     //   const token = await auth.currentUser.getIdToken();
@@ -125,7 +144,7 @@ export const actions = {
       );
     });
   },
-  async getUserLists({ commit }){
+  async getUserLists({ commit }) {
     const UserList = db.collection("user_profiles");
     const snapshot = await UserList.get();
     snapshot.forEach(doc => {
@@ -133,7 +152,7 @@ export const actions = {
         ...doc.data(),
         id: doc.id
       };
-      item.image = JSON.parse(item.image)
+      item.image = JSON.parse(item.image);
       // console.log(item.image);
       UserList.push(item);
     });
