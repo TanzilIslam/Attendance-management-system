@@ -38,10 +38,11 @@ export const actions = {
                 id: doc.id
               };
             });
-            resolve(user);
-            const { email, uid } = user;
             Cookie.set("uid", user.id);
-            commit("SET_USER", { email, uid });
+            Cookie.set("role", user.role);
+            console.log(user);
+            commit("SET_USER", user);
+            resolve(user);
           }
         })
         .catch(error => {
@@ -54,7 +55,7 @@ export const actions = {
     //   const token = await auth.currentUser.getIdToken();
     //   const { email, uid , emailVerified } = auth.currentUser;
     //   Cookie.set("access_token", token);
-    //   commit("SET_USER", { email, uid, emailVerified });
+
     // } catch (error) {
     //   throw error;
     // }
