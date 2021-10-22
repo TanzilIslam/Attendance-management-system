@@ -58,15 +58,15 @@ export default {
       drawer: true,
       fixed: false,
       items: [
-        {
-          icon: "mdi-apps",
-          title: "Users",
-          to: "/admin/users"
-        },
+        // {
+        //   icon: "mdi-apps",
+        //   title: "Users",
+        //   to: "/dashboard/users"
+        // },
         {
           icon: "mdi-chart-bubble",
           title: "Time Sheet",
-          to: "/admin/timeSheet"
+          to: "/dashboard/timeSheet"
         }
       ],
       miniVariant: false,

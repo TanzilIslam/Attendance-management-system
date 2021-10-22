@@ -146,17 +146,27 @@ export const actions = {
     });
   },
   async getUserLists({ commit }) {
-    const UserList = db.collection("user_profiles");
-    const snapshot = await UserList.get();
-    snapshot.forEach(doc => {
-      let item = {
-        ...doc.data(),
-        id: doc.id
-      };
-      item.image = JSON.parse(item.image);
-      // console.log(item.image);
-      UserList.push(item);
+    return await new Promise((resolve, reject) => {
+      let allUsers = [];
+      db.collection("users")
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.empty) {
+            resolve("User Not Found");
+          } else {
+            querySnapshot.forEach(doc => {
+              let user = {
+                ...doc.data(),
+                id: doc.id
+              };
+              allUsers.push(user);
+            });
+            resolve(allUsers);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
-    commit("GET_LIST", UserList);
   }
 };

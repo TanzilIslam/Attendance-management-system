@@ -1,13 +1,15 @@
 <template>
   <div>
-    dashboard
+      timeSheet
   </div>
 </template>
 
 <script>
 export default {
-  layout: "users"
-};
+
+}
 </script>
 
-<style></style>
+<style>
+
+</style>
