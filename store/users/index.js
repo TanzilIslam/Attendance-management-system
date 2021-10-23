@@ -60,77 +60,72 @@ export const actions = {
     //   throw error;
     // }
   },
-  async signup({ commit }, userInfo) {
-    try {
-      await auth
-        .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
-        .then(userCredential => {
-          var user = auth.currentUser;
-
-          user
-            .sendEmailVerification()
-            .then(function() {
-              // Email sent.
-            })
-            .catch(function(error) {
-              throw error;
-            });
-        });
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async fileUpload({ commit }, file) {
-    return new Promise(function(resolve, reject) {
-      var storageRef = firebase.storage().ref("profile_pictures/" + file.name);
-      let uploadTask = storageRef.put(file);
-      uploadTask.on(
-        "state_changed",
-        snapshot => {
-          var progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case firebase.storage.TaskState.PAUSED:
-              console.log("Upload is paused");
-              break;
-            case firebase.storage.TaskState.RUNNING:
-              console.log("Upload is running");
-              break;
-          }
-        },
-        error => {
-          reject(error);
-        },
-        () => {
-          uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-            file.url = downloadURL;
-            resolve(file);
+  async addUser({ commit }, item) {
+    return await new Promise((resolve, reject) => {
+      try {
+        db.collection("users")
+          .add({
+            name: item.name,
+            entryDate: item.entryDate,
+            email: item.email,
+            password: item.password,
+            address: item.address,
+            phone: item.phone,
+            role: item.role,
+            status: item.status,
+            leavingDate: item.leavingDate
+          })
+          .then(docRef => {
+            resolve(docRef.id);
           });
-        }
-      );
+      } catch (error) {
+        reject(error);
+      }
     });
   },
-  updateUserInfo({ commit }, userInfo) {
-    try {
-      db.collection("user_profiles")
-        .doc(userInfo.uuid)
-        .set({
-          country: userInfo.country,
-          state: userInfo.state,
-          city: userInfo.city,
-          currency: userInfo.currency,
-          address: userInfo.address,
-          postalCode: userInfo.postalCode,
-          countryFlag: userInfo.countryFlag,
-          phoneNumber: userInfo.phoneNumber,
-          uuid: userInfo.uuid
-        })
-        .then(docRef => {});
-    } catch (error) {
-      throw error;
-    }
+
+  async updateUser({ commit }, item) {
+    return await new Promise((resolve, reject) => {
+      try {
+        db.collection("users")
+          .doc(item.id)
+          .set({
+            name: item.name,
+            entryDate: item.entryDate,
+            leavingDate: item.leavingDate,
+            email: item.email,
+            password: item.password,
+            address: item.address,
+            phone: item.phone,
+            role: item.role,
+            status: item.status
+          })
+          .then(docRef => {
+            resolve(item);
+          });
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  },
+  async deleteUser({ commit }, id) {
+    return await new Promise((resolve, reject) => {
+      try {
+        console.log(id);
+        db.collection("users")
+          .doc(id)
+          .delete()
+          .then(() => {
+            resolve(id);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      } catch (error) {
+        reject(error);
+      }
+    });
   },
   getUserProfile({ commit }, id) {
     return new Promise((resolve, reject) => {
