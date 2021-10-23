@@ -40,7 +40,7 @@
       </v-card-text>
     </v-card>
     <v-row justify="center">
-      <v-dialog v-model="dialog" persistent max-width="600">
+      <v-dialog v-model="dialog" fullscreen persistent>
         <v-card :loading="formLoading">
           <v-card-title>
             <span class="text-h5">{{ modeTitle }}</span>
@@ -49,9 +49,11 @@
             <v-container>
               <v-form v-model="valid" ref="form" lazy-validation>
                 <v-row>
-                  <v-toolbar dense color="primary" dark>
-                    Employee Information
-                  </v-toolbar>
+                  <v-col cols="12">
+                    <v-toolbar dense color="primary" dark>
+                      Employee Information
+                    </v-toolbar>
+                  </v-col>
                   <v-col cols="12" sm="12" md="6" lg="6" xl="6">
                     <v-text-field
                       v-model.trim="name"
@@ -155,9 +157,11 @@
                     ></v-select>
                   </v-col>
 
-                  <v-toolbar dense color="primary" class="mt-4" dark>
-                    Login Information
-                  </v-toolbar>
+                  <v-col cols="12">
+                    <v-toolbar dense color="primary" class="mt-4" dark>
+                      Login Information
+                    </v-toolbar>
+                  </v-col>
                   <v-col cols="12" sm="12" md="6" lg="6" xl="6">
                     <v-text-field
                       dense
@@ -185,9 +189,11 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-toolbar dense color="primary" class="mt-4" dark>
-                    Role Permission
-                  </v-toolbar>
+                  <v-col cols="12">
+                    <v-toolbar dense color="primary" class="mt-4" dark>
+                      Role Permission
+                    </v-toolbar>
+                  </v-col>
                   <v-col cols="12" sm="12" md="6" lg="6" xl="6">
                     <v-select
                       v-model="role"

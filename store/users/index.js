@@ -84,6 +84,28 @@ export const actions = {
     });
   },
 
+  async updateSheet({ commit }, item) {
+    return await new Promise((resolve, reject) => {
+      try {
+        db.collection("timeSheet")
+          .doc(item.id)
+          .set({
+            date: item.date,
+            start_working: item.start_working,
+            end_working: item.end_working,
+            start_break: item.start_break,
+            end_break: item.end_break
+          })
+          .then(docRef => {
+            resolve(item);
+          });
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  },
+
   async updateUser({ commit }, item) {
     return await new Promise((resolve, reject) => {
       try {

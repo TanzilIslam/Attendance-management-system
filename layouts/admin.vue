@@ -66,7 +66,7 @@ export default {
         {
           icon: "mdi-chart-bubble",
           title: "Time Sheet",
-          to: "/admin/timeSheet"
+          to: "/timeSheet"
         }
       ],
       miniVariant: false,
