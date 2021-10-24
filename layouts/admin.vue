@@ -37,6 +37,9 @@
         @change="toggleTheme()"
         v-model="goDark"
       ></v-switch>
+      <v-btn dense @click="logout">
+        LogOut
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -50,6 +53,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -78,6 +82,11 @@ export default {
   methods: {
     toggleTheme() {
       this.$vuetify.theme.dark = this.goDark;
+    },
+    logout() {
+      localStorage.clear();
+      Cookies.remove("uid");
+      Cookies.remove("role");
     }
   }
 };

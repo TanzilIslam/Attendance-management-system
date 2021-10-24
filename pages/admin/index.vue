@@ -1,6 +1,5 @@
 <template>
   <div>
-    DashBoard
     <v-row>
       <v-col cols="12" sm="12" md="3" lg="3" xl="3">
         <Clock class="mb-2" />
