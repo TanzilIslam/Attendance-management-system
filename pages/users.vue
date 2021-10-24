@@ -42,8 +42,8 @@
     <v-row justify="center">
       <v-dialog v-model="dialog" fullscreen persistent>
         <v-card :loading="formLoading">
-          <v-card-title>
-            <span class="text-h5">{{ modeTitle }}</span>
+          <v-card-title class="ml-4">
+            <span class="text-h5 ml-5">{{ modeTitle }}</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -210,14 +210,13 @@
               </v-form>
             </v-container>
           </v-card-text>
-          <v-card-actions>
-            <v-btn color="error" width="250" dense @click="cancle">
+          <v-card-actions class="justify-center">
+            <v-btn centered color="error" width="155" dense @click="cancle">
               Cancle
             </v-btn>
-            <v-spacer></v-spacer>
             <v-btn
+              width="155"
               color="primary"
-              width="250"
               dense
               :loading="buttonLoading"
               @click="addUser"
@@ -257,7 +256,7 @@
 </template>
 <script>
 export default {
-  layout: "admin",
+  layout: "Dashboard",
   data: () => ({
     deleteDialog: false,
     mode: "add",

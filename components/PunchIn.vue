@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card height="140">
+    <v-card>
       <v-card-title>
         Punch In
         <v-spacer></v-spacer>
@@ -9,52 +9,53 @@
           <v-icon color="primary">mdi-emoticon-happy-outline</v-icon>
         </p>
       </v-card-title>
-      <v-card-actions class="d-flex flex-wrap">
-        <div>
-          <v-btn
-            :loading="loadingSw"
-            :disabled="sw"
-            @click="punchIn('sw')"
-            class="elevation-5 mb-2 mr-2"
+      <v-card-actions>
+        <v-row>
+          <v-col cols="12" sm="6" md="3" lg="3" xl="3">
+            <v-btn
+              :loading="loadingSw"
+              :disabled="sw"
+              @click="punchIn('sw')"
+              class="elevation-5 mb-2 mr-2"
+            >
+              <v-icon class="mr-2 ">mdi-clock</v-icon>
+              Start Working
+            </v-btn></v-col
           >
-            <v-icon class="mr-2 ">mdi-clock</v-icon>
-            Start Working
-          </v-btn>
-        </div>
-        <div>
-          <v-btn
-            :loading="loadingSb"
-            :disabled="sb"
-            @click="punchIn('sb')"
-            class="elevation-5 mb-2 mr-2"
+          <v-col cols="12" sm="6" md="3" lg="3" xl="3">
+            <v-btn
+              :loading="loadingSb"
+              :disabled="sb"
+              @click="punchIn('sb')"
+              class="elevation-5 mb-2 mr-2"
+            >
+              <v-icon class="mr-2 ">mdi-coffee</v-icon>
+              Start Break
+            </v-btn></v-col
           >
-            <v-icon class="mr-2 ">mdi-coffee</v-icon>
-            Start Break
-          </v-btn>
-        </div>
-
-        <div>
-          <v-btn
-            :loading="loadingFb"
-            :disabled="fb"
-            @click="punchIn('fb')"
-            class="elevation-5 mb-2 mr-1"
+          <v-col cols="12" sm="6" md="3" lg="3" xl="3">
+            <v-btn
+              :loading="loadingFb"
+              :disabled="fb"
+              @click="punchIn('fb')"
+              class="elevation-5 mb-2 mr-1"
+            >
+              <v-icon class="mr-2 ">mdi-laptop</v-icon>
+              Finish Break
+            </v-btn></v-col
           >
-            <v-icon class="mr-2 ">mdi-laptop</v-icon>
-            Finish Break
-          </v-btn>
-        </div>
-        <div>
-          <v-btn
-            :loading="loadingFw"
-            :disabled="fw"
-            @click="punchIn('fw')"
-            class="elevation-5 mb-2 mr-1"
+          <v-col cols="12" sm="6" md="3" lg="3" xl="3">
+            <v-btn
+              :loading="loadingFw"
+              :disabled="fw"
+              @click="punchIn('fw')"
+              class="elevation-5 mb-2 mr-1"
+            >
+              <v-icon class="mr-2">mdi-walk</v-icon>
+              Finish Work
+            </v-btn></v-col
           >
-            <v-icon class="mr-2">mdi-walk</v-icon>
-            Finish Work
-          </v-btn>
-        </div>
+        </v-row>
       </v-card-actions>
     </v-card>
     <v-snackbar :color="snackbarColor" v-model="showSnackbar" top centered>

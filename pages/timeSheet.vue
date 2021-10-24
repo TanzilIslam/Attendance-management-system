@@ -52,7 +52,7 @@
 import Cookie from "js-cookie";
 import moment from "moment";
 export default {
-  layout: "admin",
+  layout: "Dashboard",
   async mounted() {
     let self = this;
     let payload = {

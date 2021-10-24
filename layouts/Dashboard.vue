@@ -30,7 +30,11 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title
+        ><v-btn to="/">
+          <v-icon color="primary">mdi-home</v-icon>
+        </v-btn></v-toolbar-title
+      >
       <v-spacer></v-spacer>
       <v-switch
         class="mt-5"
@@ -65,7 +69,7 @@ export default {
         {
           icon: "mdi-apps",
           title: "Users",
-          to: "/admin/users"
+          to: "/users"
         },
         {
           icon: "mdi-chart-bubble",
@@ -87,6 +91,7 @@ export default {
       localStorage.clear();
       Cookies.remove("uid");
       Cookies.remove("role");
+      this.$router.push("/login");
     }
   }
 };
