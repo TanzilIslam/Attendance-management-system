@@ -49,10 +49,45 @@
 </template>
 
 <script>
+import Cookie from "js-cookie";
 import moment from "moment";
 export default {
   layout: "admin",
-  mounted() {
+  async mounted() {
+    let self = this;
+    let payload = {
+      id: this.id
+    };
+    await this.$store
+      .dispatch("users/checkSheetById", payload)
+      .then(e => {
+        if (e !== "User Not Found") {
+          e.forEach(el => {
+            self.items.push({
+              date: moment(String(el.date), "MM-DD-YYYY").format("D- dddd"),
+              work_category:
+                moment(String(el.date), "MM-DD-YYYY")
+                  .format("D- dddd")
+                  .includes("Saturday") ||
+                moment(String(el.date), "MM-DD-YYYY")
+                  .format("D- dddd")
+                  .includes("Sunday")
+                  ? "Off Day"
+                  : "Working Day",
+              start_working: el.start_working,
+              end_working: el.end_working,
+              start_break: el.start_break,
+              end_break: el.end_break,
+              total_work: self.totalWork(el.start_working, el.end_working),
+              total_break: self.totalBreak(el.start_break, el.end_break)
+            });
+          });
+        }
+        self.loading = false;
+      })
+      .catch(e => {});
+    self.loading = false;
+
     // let self = this;
     // var schedule = this.getDaysArrayByMonth();
     // schedule.reverse().forEach(function(item) {
@@ -104,7 +139,7 @@ export default {
         },
         {
           text: "Total Work",
-          value: "totla_work"
+          value: "total_work"
         },
         {
           text: "Total Break",
@@ -112,13 +147,14 @@ export default {
         }
       ],
       items: [],
-      loading: false,
+      loading: true,
       search: "",
       searchYear: "",
       searchMonth: "",
       activePicker: null,
       date: moment().format("YYYY-MM-DD"),
-      menu: false
+      menu: false,
+      id: Cookie.get("uid")
     };
   },
   watch: {
@@ -140,8 +176,25 @@ export default {
       }
 
       return arrDays;
+    },
+    totalWork(start, end) {
+      var startTime = moment(String(start), "HH:mm");
+      var endTime = moment(String(end), "HH:mm");
+      var duration = moment.duration(endTime.diff(startTime));
+      var hours = parseInt(duration.asHours());
+      var minutes = parseInt(duration.asMinutes()) % 60;
+      return hours + ":" + minutes;
+    },
+    totalBreak(start, end) {
+      var startTime = moment(String(start), "HH:mm");
+      var endTime = moment(String(end), "HH:mm");
+      var duration = moment.duration(endTime.diff(startTime));
+      var hours = parseInt(duration.asHours());
+      var minutes = parseInt(duration.asMinutes()) % 60;
+      return hours + ":" + minutes;
     }
-  }
+  },
+  computed: {}
 };
 </script>
 

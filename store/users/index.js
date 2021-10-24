@@ -49,16 +49,6 @@ export const actions = {
           reject(error);
         });
     });
-
-    // try {
-    //   await auth.signInWithEmailAndPassword(userInfo.email, userInfo.password);
-    //   const token = await auth.currentUser.getIdToken();
-    //   const { email, uid , emailVerified } = auth.currentUser;
-    //   Cookie.set("access_token", token);
-
-    // } catch (error) {
-    //   throw error;
-    // }
   },
   async addUser({ commit }, item) {
     return await new Promise((resolve, reject) => {
@@ -83,18 +73,90 @@ export const actions = {
       }
     });
   },
-
-  async updateSheet({ commit }, item) {
+  async checkSheet({ commit }, userInfo) {
+    return await new Promise((resolve, reject) => {
+      db.collection("timeSheet")
+        .where("id", "==", userInfo.id)
+        .where("date", "==", userInfo.date)
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.empty) {
+            resolve("User Not Found");
+          } else {
+            let timeSheet = null;
+            querySnapshot.forEach(doc => {
+              timeSheet = {
+                ...doc.data(),
+                sheetId: doc.id
+              };
+            });
+            resolve(timeSheet);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  async checkSheetById({ commit }, userInfo) {
+    return await new Promise((resolve, reject) => {
+      db.collection("timeSheet")
+        .where("id", "==", userInfo.id)
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.empty) {
+            resolve("User Not Found");
+          } else {
+            let timeSheet = null;
+            let timeSheetList = [];
+            querySnapshot.forEach(doc => {
+              timeSheet = {
+                ...doc.data(),
+                sheetId: doc.id
+              };
+              timeSheetList.push(timeSheet);
+            });
+            resolve(timeSheetList);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  async createSheet({ commit }, item) {
     return await new Promise((resolve, reject) => {
       try {
         db.collection("timeSheet")
-          .doc(item.id)
-          .set({
+          .add({
+            id: item.id,
             date: item.date,
             start_working: item.start_working,
             end_working: item.end_working,
             start_break: item.start_break,
             end_break: item.end_break
+          })
+          .then(docRef => {
+            resolve(docRef.id);
+          });
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  },
+  async updateSheet({ commit }, item) {
+    return await new Promise((resolve, reject) => {
+      try {
+        db.collection("timeSheet")
+          .doc(item.sheetId)
+          .set({
+            date: item.date,
+            start_working: item.start_working,
+            end_working: item.end_working,
+            start_break: item.start_break,
+            end_break: item.end_break,
+            id: item.id
           })
           .then(docRef => {
             resolve(item);
