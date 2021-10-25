@@ -195,20 +195,28 @@ export default {
       console.log(this.items);
     },
     totalWork(start, end) {
-      var startTime = moment(String(start), "HH:mm");
-      var endTime = moment(String(end), "HH:mm");
-      var duration = moment.duration(endTime.diff(startTime));
-      var hours = parseInt(duration.asHours());
-      var minutes = parseInt(duration.asMinutes()) % 60;
-      return hours + ":" + minutes;
+      if (start !== null && end !== null) {
+        var startTime = moment(String(start), "HH:mm");
+        var endTime = moment(String(end), "HH:mm");
+        var duration = moment.duration(endTime.diff(startTime));
+        var hours = parseInt(duration.asHours());
+        var minutes = parseInt(duration.asMinutes()) % 60;
+        return hours + ":" + minutes;
+      } else {
+        return 0;
+      }
     },
     totalBreak(start, end) {
-      var startTime = moment(String(start), "HH:mm");
-      var endTime = moment(String(end), "HH:mm");
-      var duration = moment.duration(endTime.diff(startTime));
-      var hours = parseInt(duration.asHours());
-      var minutes = parseInt(duration.asMinutes()) % 60;
-      return hours + ":" + minutes;
+      if (start !== null && end !== null) {
+        var startTime = moment(String(start), "HH:mm");
+        var endTime = moment(String(end), "HH:mm");
+        var duration = moment.duration(endTime.diff(startTime));
+        var hours = parseInt(duration.asHours());
+        var minutes = parseInt(duration.asMinutes()) % 60;
+        return hours + ":" + minutes;
+      } else {
+        return 0;
+      }
     }
   },
   computed: {}

@@ -37,7 +37,11 @@
       </div>
     </div>
     <div class="text-right mb-4">
-      <v-btn color="primary" @click="generateReport">
+      <v-btn
+        color="primary"
+        :disabled="cloneItems.length == 0"
+        @click="generateReport"
+      >
         Generate Report
       </v-btn>
     </div>
@@ -85,12 +89,11 @@ export default {
       .dispatch("users/getAllSheet", payload)
       .then(e => {
         if (e !== "User Not Found") {
-          console.log(e);
           e.forEach(el => {
             self.items.push({
               name: el.name,
               date: moment(String(el.date), "MM-DD-YYYY").format(
-                "D- dddd, MMMM"
+                "D- dddd, MMMM YYYY"
               ),
               work_category:
                 moment(String(el.date), "MM-DD-YYYY")
@@ -174,13 +177,79 @@ export default {
   },
   methods: {
     generateReport() {
-      console.log(this.cloneItems);
+      let self = this;
+      let lables = [
+        [
+          "Date",
+          "Name",
+          "Total Work",
+          "Total Break",
+          "Start Work",
+          "End Work",
+          "Start Break",
+          "End Break"
+        ]
+      ];
+      this.cloneItems.forEach(el => {
+        let Date = "";
+        let Name = "";
+        let total_work = "";
+        let total_break = "";
+        let start_working = "";
+        let end_working = "";
+        let start_break = "";
+        let end_break = "";
+        Date = el.date;
+        Name = el.name;
+        total_work = el.total_work;
+        total_break = el.total_break;
+        start_working = el.start_working;
+        end_working = el.end_working;
+        start_break = el.start_break;
+        end_break = el.end_break;
+        let data = [
+          Date,
+          Name,
+          total_work,
+          total_break,
+          start_working,
+          end_working,
+          start_break,
+          end_break
+        ];
+        lables.push(data);
+      });
+      var wb = XLSX.utils.book_new();
+      wb.Props = {
+        Title: "Consumer Summary Report",
+        Subject: "Information of consumer",
+        Author: "Tanzil"
+      };
+      wb.SheetNames.push("Attendance Sheet");
+      var ws_data = lables;
+
+      var ws = XLSX.utils.aoa_to_sheet(ws_data);
+      wb.Sheets["Attendance Sheet"] = ws;
+      var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+      console.log(wbout);
+      saveAs(
+        new Blob([self.binaryToOctetStream(wbout)], {
+          type: "application/octet-stream"
+        }),
+        `Attendance Sheet.xlsx`
+      );
     },
     editItem(item) {
       console.log(item);
     },
     deleteItem(item) {
       console.log(item);
+    },
+       binaryToOctetStream(s) {
+      var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+      var view = new Uint8Array(buf); //create uint8array as viewer
+      for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff; //convert to octet
+      return buf;
     },
     save(date) {
       this.$refs.menu.save(date);
@@ -189,20 +258,28 @@ export default {
       console.log(this.items);
     },
     totalWork(start, end) {
-      var startTime = moment(String(start), "HH:mm");
-      var endTime = moment(String(end), "HH:mm");
-      var duration = moment.duration(endTime.diff(startTime));
-      var hours = parseInt(duration.asHours());
-      var minutes = parseInt(duration.asMinutes()) % 60;
-      return hours + ":" + minutes;
+      if (start !== null && end !== null) {
+        var startTime = moment(String(start), "HH:mm");
+        var endTime = moment(String(end), "HH:mm");
+        var duration = moment.duration(endTime.diff(startTime));
+        var hours = parseInt(duration.asHours());
+        var minutes = parseInt(duration.asMinutes()) % 60;
+        return hours + ":" + minutes;
+      } else {
+        return 0;
+      }
     },
     totalBreak(start, end) {
-      var startTime = moment(String(start), "HH:mm");
-      var endTime = moment(String(end), "HH:mm");
-      var duration = moment.duration(endTime.diff(startTime));
-      var hours = parseInt(duration.asHours());
-      var minutes = parseInt(duration.asMinutes()) % 60;
-      return hours + ":" + minutes;
+      if (start !== null && end !== null) {
+        var startTime = moment(String(start), "HH:mm");
+        var endTime = moment(String(end), "HH:mm");
+        var duration = moment.duration(endTime.diff(startTime));
+        var hours = parseInt(duration.asHours());
+        var minutes = parseInt(duration.asMinutes()) % 60;
+        return hours + ":" + minutes;
+      } else {
+        return 0;
+      }
     }
   },
   computed: {}
