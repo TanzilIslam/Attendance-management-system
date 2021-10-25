@@ -327,7 +327,7 @@ export default {
   }),
   async created() {
     let self = this;
-    // get all user list
+    // get all users list
     await self.getUserList();
     this.loading = false;
   },
