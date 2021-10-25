@@ -448,6 +448,7 @@ export default {
 
     addNewUser() {
       this.dialog = true;
+      this.mode = "add"
     }
   },
   watch: {

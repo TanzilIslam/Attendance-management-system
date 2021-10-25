@@ -36,6 +36,12 @@
         </v-menu>
       </div>
     </div>
+    <div class="text-right mb-4">
+      <v-btn color="primary" @click="generateReport">
+        Generate Report
+      </v-btn>
+    </div>
+
     <v-data-table
       :headers="headers"
       :items="items"
@@ -59,6 +65,8 @@
 <script>
 import Cookie from "js-cookie";
 import moment from "moment";
+import XLSX from "xlsx";
+import { saveAs } from "file-saver";
 export default {
   layout: "Dashboard",
   beforeRouteEnter(to, from, next) {
@@ -74,11 +82,13 @@ export default {
       id: this.id
     };
     await this.$store
-      .dispatch("users/checkSheetById", payload)
+      .dispatch("users/getAllSheet", payload)
       .then(e => {
         if (e !== "User Not Found") {
+          console.log(e);
           e.forEach(el => {
             self.items.push({
+              name: el.name,
               date: moment(String(el.date), "MM-DD-YYYY").format(
                 "D- dddd, MMMM"
               ),
@@ -105,31 +115,12 @@ export default {
       })
       .catch(e => {});
     self.loading = false;
-
-    // let self = this;
-    // var schedule = this.getDaysArrayByMonth();
-    // schedule.reverse().forEach(function(item) {
-    //   let date = item.format("D - dddd");
-    //   self.items.push({
-    //     date: date,
-    //     work_category:
-    //       date.includes("Saturday") || date.includes("Sunday")
-    //         ? "Off Day"
-    //         : "Working Day",
-    //     start_working: "",
-    //     end_working: "",
-    //     start_break: "",
-    //     end_break: "",
-    //     total_work: "",
-    //     total_break: ""
-    //   });
-    // });
   },
   data() {
     return {
       pagination: "",
       headers: [
-        { text: "Actions", value: "actions", sortable: false },
+        { text: "Name", value: "name" },
         {
           text: "Date",
           value: "date",
@@ -182,6 +173,9 @@ export default {
     }
   },
   methods: {
+    generateReport() {
+      console.log(this.cloneItems);
+    },
     editItem(item) {
       console.log(item);
     },

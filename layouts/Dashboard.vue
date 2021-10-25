@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+    width="170"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -81,24 +82,28 @@ export default {
       items:[],
       itemsUser: [
         {
-          icon: "mdi-chart-bubble",
+          icon: "mdi-account-clock",
           title: "Time Sheet",
           to: "/timeSheet"
         }
       ],
       itemsAdmin: [
         {
-          icon: "mdi-apps",
+          icon: "mdi-account-group",
           title: "Users",
           to: "/users"
         },
         {
-          icon: "mdi-chart-bubble",
+          icon: "mdi-account-clock",
           title: "Time Sheet",
           to: "/timeSheet"
+        },
+         {
+          icon: "mdi-chart-box",
+          title: "Report",
+          to: "/report"
         }
       ],
-      
       miniVariant: false,
       right: true,
       rightDrawer: false,

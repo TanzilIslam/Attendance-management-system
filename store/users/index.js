@@ -35,13 +35,13 @@ export const actions = {
             querySnapshot.forEach(doc => {
               user = {
                 ...doc.data(),
-                id: doc.id
+                id: doc.id,
               };
             });
             Cookie.set("uid", user.id);
             Cookie.set("role", user.role);
+            Cookie.set("name",user.name)
             console.log(user);
-            commit("SET_USER", user);
             resolve(user);
           }
         })
@@ -71,6 +71,31 @@ export const actions = {
       } catch (error) {
         reject(error);
       }
+    });
+  },
+  async getAllSheet({ commit }, userInfo) {
+    return await new Promise((resolve, reject) => {
+      db.collection("timeSheet")
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.empty) {
+            resolve("User Not Found");
+          } else {
+            let timeSheet = null;
+            let timeSheetList = [];
+            querySnapshot.forEach(doc => {
+              timeSheet = {
+                ...doc.data(),
+                sheetId: doc.id
+              };
+              timeSheetList.push(timeSheet);
+            });
+            resolve(timeSheetList);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   },
   async checkSheet({ commit }, userInfo) {
@@ -129,6 +154,7 @@ export const actions = {
       try {
         db.collection("timeSheet")
           .add({
+            name:item.name,
             id: item.id,
             date: item.date,
             start_working: item.start_working,
@@ -156,7 +182,8 @@ export const actions = {
             end_working: item.end_working,
             start_break: item.start_break,
             end_break: item.end_break,
-            id: item.id
+            id: item.id,
+            name: item.name
           })
           .then(docRef => {
             resolve(item);

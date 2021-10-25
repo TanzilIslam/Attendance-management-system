@@ -104,6 +104,7 @@ export default {
       fw: false,
       fb: false,
       id: Cookie.get("uid"),
+      name:Cookie.get("name"),
       loadingSw: false,
       loadingSb: false,
       loadingFw: false,
@@ -126,7 +127,8 @@ export default {
         end_break: localStorage.getItem("fb"),
         end_working: localStorage.getItem("fw"),
         id: this.id,
-        sheetId: localStorage.getItem("sheetId")
+        sheetId: localStorage.getItem("sheetId"),
+        name: this.name
       };
       if (type == "sw") {
         this.sw = true;
