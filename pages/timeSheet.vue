@@ -53,13 +53,13 @@ import Cookie from "js-cookie";
 import moment from "moment";
 export default {
   layout: "Dashboard",
-    beforeRouteEnter (to, from, next) {
-  next(vm => {
-    if (Cookie.get("uid") == undefined) {
-      vm.$router.push("/login");
-    }
-  })
-},
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (Cookie.get("uid") == undefined) {
+        vm.$router.push("/login");
+      }
+    });
+  },
   async mounted() {
     let self = this;
     let payload = {
@@ -71,7 +71,9 @@ export default {
         if (e !== "User Not Found") {
           e.forEach(el => {
             self.items.push({
-              date: moment(String(el.date), "MM-DD-YYYY").format("D- dddd"),
+              date: moment(String(el.date), "MM-DD-YYYY").format(
+                "D- dddd, MMMM"
+              ),
               work_category:
                 moment(String(el.date), "MM-DD-YYYY")
                   .format("D- dddd")
@@ -89,6 +91,7 @@ export default {
               total_break: self.totalBreak(el.start_break, el.end_break)
             });
           });
+          self.cloneItems = self.items
         }
         self.loading = false;
       })
@@ -154,6 +157,7 @@ export default {
         }
       ],
       items: [],
+      cloneItems:[],
       loading: true,
       search: "",
       searchYear: "",
@@ -172,17 +176,9 @@ export default {
   methods: {
     save(date) {
       this.$refs.menu.save(date);
-    },
-    getDaysArrayByMonth() {
-      var daysInMonth = moment().daysInMonth();
-      var arrDays = [];
-      while (daysInMonth) {
-        var current = moment().date(daysInMonth);
-        arrDays.push(current);
-        daysInMonth--;
-      }
-
-      return arrDays;
+      let searchDate = moment(String(date), "YYYY-MM").format("MMMM");
+      this.items =  this.cloneItems.filter(x =>  x.date.includes(searchDate));
+      console.log(this.items);
     },
     totalWork(start, end) {
       var startTime = moment(String(start), "HH:mm");
