@@ -255,8 +255,16 @@
   </div>
 </template>
 <script>
+import Cookie from "js-cookie";
 export default {
   layout: "Dashboard",
+    beforeRouteEnter (to, from, next) {
+  next(vm => {
+    if (Cookie.get("uid") == undefined) {
+      vm.$router.push("/login");
+    }
+  })
+},
   data: () => ({
     deleteDialog: false,
     mode: "add",

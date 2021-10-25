@@ -16,7 +16,7 @@ export default {
   css: ["@/assets/main.css"],
   plugins: [],
   router: {
-    middleware: ["authenticated"]
+    // middleware: ["authenticated"]
   },
   loading: {
     color: "#F57F17",

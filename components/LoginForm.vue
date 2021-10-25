@@ -97,7 +97,8 @@ export default {
             if (e == "User Not Found") {
               self.showSnackbar = true;
             } else {
-              console.log("fond");
+              self.$router.push("/")
+              
             }
           })
           .catch(e => {

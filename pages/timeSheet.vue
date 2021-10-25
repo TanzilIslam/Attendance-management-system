@@ -53,6 +53,13 @@ import Cookie from "js-cookie";
 import moment from "moment";
 export default {
   layout: "Dashboard",
+    beforeRouteEnter (to, from, next) {
+  next(vm => {
+    if (Cookie.get("uid") == undefined) {
+      vm.$router.push("/login");
+    }
+  })
+},
   async mounted() {
     let self = this;
     let payload = {
