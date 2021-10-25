@@ -2,7 +2,6 @@ import { auth } from "@/services/firebase";
 import { db } from "@/services/firebase";
 import firebase from "firebase/app";
 import Cookie from "js-cookie";
-
 export const state = () => ({
   user: null,
   userInfo: {},
@@ -19,7 +18,6 @@ export const mutations = {
     state.UserList = category;
   }
 };
-
 export const actions = {
   async login({ commit }, userInfo) {
     return await new Promise((resolve, reject) => {
@@ -35,12 +33,12 @@ export const actions = {
             querySnapshot.forEach(doc => {
               user = {
                 ...doc.data(),
-                id: doc.id,
+                id: doc.id
               };
             });
             Cookie.set("uid", user.id);
             Cookie.set("role", user.role);
-            Cookie.set("name",user.name)
+            Cookie.set("name", user.name);
             console.log(user);
             resolve(user);
           }
@@ -154,7 +152,7 @@ export const actions = {
       try {
         db.collection("timeSheet")
           .add({
-            name:item.name,
+            name: item.name,
             id: item.id,
             date: item.date,
             start_working: item.start_working,
@@ -194,7 +192,6 @@ export const actions = {
       }
     });
   },
-
   async updateUser({ commit }, item) {
     return await new Promise((resolve, reject) => {
       try {
@@ -236,19 +233,6 @@ export const actions = {
       } catch (error) {
         reject(error);
       }
-    });
-  },
-  getUserProfile({ commit }, id) {
-    return new Promise((resolve, reject) => {
-      var item = db.collection("user_profiles").doc(id);
-      item.get().then(
-        response => {
-          resolve(response.data());
-        },
-        error => {
-          reject(error);
-        }
-      );
     });
   },
   async getUserLists({ commit }) {

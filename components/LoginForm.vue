@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="text-center my-4">
+      <h2>
+        Attendance Portal
+      </h2>
+    </div>
     <v-row>
       <v-col
         cols="12"
@@ -90,15 +95,13 @@ export default {
           email: this.email,
           password: this.password
         };
-
         await this.$store
           .dispatch("users/login", userInfo)
           .then(e => {
             if (e == "User Not Found") {
               self.showSnackbar = true;
             } else {
-              self.$router.push("/dashboard")
-              
+              self.$router.push("/dashboard");
             }
           })
           .catch(e => {

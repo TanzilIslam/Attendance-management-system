@@ -1,15 +1,17 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-toolbar color="primary" dark dense>
       Current Time
-    </v-card-title>
+    </v-toolbar>
+    <v-card-title color="primary"> </v-card-title>
     <v-card-text>
-      <h3>Date : {{ currentDate }}</h3>
-      <p>Time : {{ currentTime }}</p>
+      <h3>
+        <v-icon color="primary">mdi-calendar</v-icon> Date : {{ currentDate }}
+      </h3>
+      <p><v-icon color="primary">mdi-clock</v-icon> Time : {{ currentTime }}</p>
     </v-card-text>
   </v-card>
 </template>
-
 <script>
 import moment from "moment";
 export default {
@@ -31,5 +33,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

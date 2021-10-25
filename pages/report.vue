@@ -1,68 +1,88 @@
 <template>
   <div>
-    <div class="d-flex">
-      <div>
-        <v-menu
-          ref="menu"
-          v-model="menu"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="date"
-              label="Select Month"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-            v-model="date"
-            show-current
-            type="month"
-            :active-picker.sync="activePicker"
-            :max="
-              new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                .toISOString()
-                .substr(0, 10)
-            "
-            min="2000-01-01"
-            @change="save"
-          ></v-date-picker>
-        </v-menu>
-      </div>
-    </div>
-    <div class="text-right mb-4">
-      <v-btn
-        color="primary"
-        :disabled="cloneItems.length == 0"
-        @click="generateReport"
-      >
-        Generate Report
-      </v-btn>
-    </div>
-
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      class="elevation-5"
-      item-key="id"
-      :loading="loading"
-      :search="search"
-    >
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click="deleteItem(item)">
-          mdi-delete
-        </v-icon>
-      </template>
-    </v-data-table>
+    <v-container>
+      <v-card>
+        <v-card-title>
+          <h3 class="ml-2 mb-2 mr-4">Report</h3>
+          <v-text-field
+            solo
+            dense
+            class="mb-2"
+            v-model="search"
+            append-icon="mdi-magnify"
+            placeholder="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+          <div class="mt-4 mb-2 ml-3">
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  solo
+                  dense
+                  v-model="date"
+                  label="Select Month"
+                  prepend-icon="mdi-calendar"
+                  color="primary"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="date"
+                show-current
+                type="month"
+                :active-picker.sync="activePicker"
+                :max="
+                  new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                    .toISOString()
+                    .substr(0, 10)
+                "
+                min="2000-01-01"
+                @change="save"
+              ></v-date-picker>
+            </v-menu>
+          </div>
+          <v-spacer></v-spacer>
+          <div class="text-right mb-2">
+            <v-btn
+              color="primary"
+              :disabled="cloneItems.length == 0"
+              @click="generateReport"
+            >
+              Generate CSV
+            </v-btn>
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-data-table
+            :headers="headers"
+            :items="items"
+            class="elevation-5"
+            item-key="id"
+            :loading="loading"
+            :search="search"
+          >
+            <!-- <template v-slot:[`item.actions`]="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)">
+            mdi-delete
+          </v-icon>
+        </template> -->
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
@@ -73,6 +93,7 @@ import XLSX from "xlsx";
 import { saveAs } from "file-saver";
 export default {
   layout: "Dashboard",
+  // route protecting
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (Cookie.get("uid") == undefined) {
@@ -81,6 +102,7 @@ export default {
     });
   },
   async mounted() {
+    // get all records of all user
     let self = this;
     let payload = {
       id: this.id
@@ -89,6 +111,7 @@ export default {
       .dispatch("users/getAllSheet", payload)
       .then(e => {
         if (e !== "User Not Found") {
+          // process the data
           e.forEach(el => {
             self.items.push({
               name: el.name,
@@ -121,9 +144,8 @@ export default {
   },
   data() {
     return {
-      pagination: "",
       headers: [
-        { text: "Name", value: "name" },
+        { text: "Employee Name", value: "name" },
         {
           text: "Date",
           value: "date",
@@ -176,8 +198,10 @@ export default {
     }
   },
   methods: {
+    // generate csv
     generateReport() {
       let self = this;
+      // csv labels
       let lables = [
         [
           "Date",
@@ -190,6 +214,7 @@ export default {
           "End Break"
         ]
       ];
+      // process the csv's data
       this.cloneItems.forEach(el => {
         let Date = "";
         let Name = "";
@@ -219,19 +244,22 @@ export default {
         ];
         lables.push(data);
       });
+      // creating csv instance
       var wb = XLSX.utils.book_new();
       wb.Props = {
         Title: "Consumer Summary Report",
         Subject: "Information of consumer",
         Author: "Tanzil"
       };
+      // creating Sheet
       wb.SheetNames.push("Attendance Sheet");
       var ws_data = lables;
 
+      // assigning data to sheet
       var ws = XLSX.utils.aoa_to_sheet(ws_data);
       wb.Sheets["Attendance Sheet"] = ws;
       var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
-      console.log(wbout);
+      // download the csv
       saveAs(
         new Blob([self.binaryToOctetStream(wbout)], {
           type: "application/octet-stream"
@@ -245,7 +273,8 @@ export default {
     deleteItem(item) {
       console.log(item);
     },
-       binaryToOctetStream(s) {
+    // binary digig to octet
+    binaryToOctetStream(s) {
       var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
       var view = new Uint8Array(buf); //create uint8array as viewer
       for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff; //convert to octet
@@ -257,6 +286,7 @@ export default {
       this.items = this.cloneItems.filter(x => x.date.includes(searchDate));
       console.log(this.items);
     },
+    // process total work
     totalWork(start, end) {
       if (start !== null && end !== null) {
         var startTime = moment(String(start), "HH:mm");
@@ -269,6 +299,7 @@ export default {
         return 0;
       }
     },
+    // process Total break
     totalBreak(start, end) {
       if (start !== null && end !== null) {
         var startTime = moment(String(start), "HH:mm");
@@ -281,8 +312,7 @@ export default {
         return 0;
       }
     }
-  },
-  computed: {}
+  }
 };
 </script>
 

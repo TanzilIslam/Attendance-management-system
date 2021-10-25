@@ -5,7 +5,7 @@
         <h3 class="ml-2 my-4 mr-4">User List</h3>
         <v-text-field
           solo
-          class="mb-1"
+          class="mb-4"
           v-model="search"
           append-icon="mdi-magnify"
           placeholder="Search"
@@ -39,6 +39,7 @@
         </v-data-table>
       </v-card-text>
     </v-card>
+    <!-- user add/update form -->
     <v-row justify="center">
       <v-dialog v-model="dialog" fullscreen persistent>
         <v-card :loading="formLoading">
@@ -227,6 +228,7 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <!-- confirmation Dialog -->
     <v-dialog v-model="deleteDialog" max-width="290">
       <v-card>
         <v-card-title class="text-h5">
@@ -258,18 +260,18 @@
 import Cookie from "js-cookie";
 export default {
   layout: "Dashboard",
-    beforeRouteEnter (to, from, next) {
-  next(vm => {
-    if (Cookie.get("uid") == undefined) {
-      vm.$router.push("/");
-    }
-    else{
-      if (Cookie.get("role") == 'user') {
-      vm.$router.push("/dashboard");
-    }
-    }
-  })
-},
+  // protecting route
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (Cookie.get("uid") == undefined) {
+        vm.$router.push("/");
+      } else {
+        if (Cookie.get("role") == "user") {
+          vm.$router.push("/dashboard");
+        }
+      }
+    });
+  },
   data: () => ({
     deleteDialog: false,
     mode: "add",
@@ -323,15 +325,15 @@ export default {
     update: "users/updateUser",
     userid: ""
   }),
-  computed: {},
-
   async created() {
     let self = this;
+    // get all user list
     await self.getUserList();
     this.loading = false;
   },
 
   methods: {
+    // convert date YYYY-MM-DD to MM-DD-YYYY
     formatDate(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");
@@ -342,6 +344,7 @@ export default {
       const [month, day, year] = date.split("-");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
+    // user add / update
     async addUser() {
       if (this.$refs.form.validate()) {
         let self = this;
@@ -360,7 +363,6 @@ export default {
         if (self.mode == "update") {
           user.id = this.userid;
         }
-
         await this.$store
           .dispatch(self.mode === "update" ? self.update : self.add, user)
           .then(e => {
@@ -448,7 +450,7 @@ export default {
 
     addNewUser() {
       this.dialog = true;
-      this.mode = "add"
+      this.mode = "add";
     }
   },
   watch: {

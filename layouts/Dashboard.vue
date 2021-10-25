@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
-    width="170"
+      width="200"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -16,9 +16,10 @@
           :to="item.to"
           router
           exact
+          dense
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="primary">{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -27,9 +28,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon color="primary" @click.stop="drawer = !drawer" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
+        <v-icon color="primary"
+          >mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon
+        >
       </v-btn>
       <v-toolbar-title
         ><v-btn to="/dashboard">
@@ -38,17 +41,22 @@
       >
       <v-spacer></v-spacer>
       <v-switch
+        color="primary"
         class="mt-5"
         @change="toggleTheme()"
         v-model="goDark"
       ></v-switch>
-      <v-btn dense @click="logout">
-        LogOut
+      <v-btn dense icon @click="logout">
+        <v-icon color="primary">
+          mdi-logout
+        </v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
-        <Nuxt />
+        <v-fade-transition>
+          <Nuxt />
+        </v-fade-transition>
       </v-container>
     </v-main>
     <v-footer :absolute="!fixed" app>
@@ -60,18 +68,15 @@
 <script>
 import Cookie from "js-cookie";
 export default {
-  mounted(){
+  mounted() {
+    // check the user type
     if (Cookie.get("role") !== undefined) {
-      if (Cookie.get("role") == 'user') {
-        this.items = this.itemsUser
+      if (Cookie.get("role") == "user") {
+        this.items = this.itemsUser;
+      } else if (Cookie.get("role") == "admin") {
+        this.items = this.itemsAdmin;
       }
-      else if(Cookie.get("role") == 'admin'){
-        this.items = this.itemsAdmin
-
-      }
-      // this.items = Cookie.get("role") == 'admin' ? this.itemsAdmin : this.itemsUse;      
     }
-
   },
   data() {
     return {
@@ -79,7 +84,7 @@ export default {
       clipped: true,
       drawer: true,
       fixed: false,
-      items:[],
+      items: [],
       itemsUser: [
         {
           icon: "mdi-account-clock",
@@ -98,16 +103,14 @@ export default {
           title: "Time Sheet",
           to: "/timeSheet"
         },
-         {
+        {
           icon: "mdi-chart-box",
           title: "Report",
           to: "/report"
         }
       ],
       miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: "Vuetify.js"
+      right: true
     };
   },
   methods: {

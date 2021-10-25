@@ -1,5 +1,3 @@
-
-
 <template>
   <div>
     <v-row>
@@ -7,12 +5,11 @@
         <Clock class="mb-2" />
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="12" xl="12">
-           <punch-in />
+        <punch-in />
       </v-col>
     </v-row>
   </div>
 </template>
-
 <script>
 import Clock from "~/components/Clock.vue";
 import PunchIn from "~/components/PunchIn.vue";
@@ -23,13 +20,13 @@ export default {
     Clock,
     PunchIn
   },
-  beforeRouteEnter (to, from, next) {
-  next(vm => {
-    if (Cookie.get("uid") == undefined) {
-      vm.$router.push("/");
-    }
-  })
-}
+  // route protection
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (Cookie.get("uid") == undefined) {
+        vm.$router.push("/");
+      }
+    });
+  }
 };
 </script>
-<style></style>
