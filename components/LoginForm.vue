@@ -97,7 +97,7 @@ export default {
             if (e == "User Not Found") {
               self.showSnackbar = true;
             } else {
-              self.$router.push("/")
+              self.$router.push("/dashboard")
               
             }
           })

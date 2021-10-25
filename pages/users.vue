@@ -261,7 +261,12 @@ export default {
     beforeRouteEnter (to, from, next) {
   next(vm => {
     if (Cookie.get("uid") == undefined) {
-      vm.$router.push("/login");
+      vm.$router.push("/");
+    }
+    else{
+      if (Cookie.get("role") == 'user') {
+      vm.$router.push("/dashboard");
+    }
     }
   })
 },

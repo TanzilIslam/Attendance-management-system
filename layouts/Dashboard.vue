@@ -31,7 +31,7 @@
         <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
       <v-toolbar-title
-        ><v-btn to="/">
+        ><v-btn to="/dashboard">
           <v-icon color="primary">mdi-home</v-icon>
         </v-btn></v-toolbar-title
       >
@@ -59,13 +59,34 @@
 <script>
 import Cookie from "js-cookie";
 export default {
+  mounted(){
+    if (Cookie.get("role") !== undefined) {
+      if (Cookie.get("role") == 'user') {
+        this.items = this.itemsUser
+      }
+      else if(Cookie.get("role") == 'admin'){
+        this.items = this.itemsAdmin
+
+      }
+      // this.items = Cookie.get("role") == 'admin' ? this.itemsAdmin : this.itemsUse;      
+    }
+
+  },
   data() {
     return {
       goDark: false,
       clipped: true,
       drawer: true,
       fixed: false,
-      items: [
+      items:[],
+      itemsUser: [
+        {
+          icon: "mdi-chart-bubble",
+          title: "Time Sheet",
+          to: "/timeSheet"
+        }
+      ],
+      itemsAdmin: [
         {
           icon: "mdi-apps",
           title: "Users",
@@ -77,6 +98,7 @@ export default {
           to: "/timeSheet"
         }
       ],
+      
       miniVariant: false,
       right: true,
       rightDrawer: false,
@@ -91,7 +113,7 @@ export default {
       localStorage.clear();
       Cookie.remove("uid");
       Cookie.remove("role");
-      this.$router.push("/login");
+      this.$router.push("/");
     }
   }
 };

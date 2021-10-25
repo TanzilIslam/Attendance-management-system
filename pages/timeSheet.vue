@@ -44,8 +44,17 @@
       :loading="loading"
       :search="search"
     >
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon small class="mr-2" @click="editItem(item)">
+          mdi-pencil
+        </v-icon>
+        <v-icon small @click="deleteItem(item)">
+          mdi-delete
+        </v-icon>
+      </template>
     </v-data-table>
   </div>
+
 </template>
 
 <script>
@@ -56,7 +65,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (Cookie.get("uid") == undefined) {
-        vm.$router.push("/login");
+        vm.$router.push("/");
       }
     });
   },
@@ -91,7 +100,7 @@ export default {
               total_break: self.totalBreak(el.start_break, el.end_break)
             });
           });
-          self.cloneItems = self.items
+          self.cloneItems = self.items;
         }
         self.loading = false;
       })
@@ -157,7 +166,7 @@ export default {
         }
       ],
       items: [],
-      cloneItems:[],
+      cloneItems: [],
       loading: true,
       search: "",
       searchYear: "",
@@ -174,10 +183,16 @@ export default {
     }
   },
   methods: {
+    editItem(item) {
+      console.log(item);
+    },
+    deleteItem(item) {
+      console.log(item);
+    },
     save(date) {
       this.$refs.menu.save(date);
       let searchDate = moment(String(date), "YYYY-MM").format("MMMM");
-      this.items =  this.cloneItems.filter(x =>  x.date.includes(searchDate));
+      this.items = this.cloneItems.filter(x => x.date.includes(searchDate));
       console.log(this.items);
     },
     totalWork(start, end) {
