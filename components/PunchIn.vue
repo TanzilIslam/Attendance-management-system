@@ -70,6 +70,11 @@ import Cookie from "js-cookie";
 export default {
   async created() {
     // check the status for the day
+    if (process.client) {
+      this.id = Cookie.get("uid");
+      this.name = Cookie.get("name");
+    }
+
     let self = this;
     let payload = {
       date: moment().format("MM-DD-YYYY"),
@@ -125,8 +130,8 @@ export default {
       sb: false,
       fw: false,
       fb: false,
-      id: Cookie.get("uid"),
-      name: Cookie.get("name")
+      id: null,
+      name: null
     };
   },
   methods: {
