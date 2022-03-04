@@ -14,7 +14,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
   css: ["@/assets/main.css"],
-  plugins: [],
+  plugins: [{ src: "~/plugins/gtm.js", ssr: false }],
   router: {
     // middleware: ["authenticated"]
   },
