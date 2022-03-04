@@ -25,7 +25,7 @@ export default {
     duration: 3000,
   },
   components: true,
-  buildModules: ["@nuxtjs/vuetify"],
+  buildModules: ["@nuxtjs/vuetify", "@nuxtjs/google-analytics"],
   modules: ["@nuxtjs/axios"],
   axios: {},
   vuetify: {
@@ -46,5 +46,8 @@ export default {
   build: {},
   generate: {
     fallback: true,
+  },
+  googleAnalytics: {
+    id: "G-F73B104ER2",
   },
 };
