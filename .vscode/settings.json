@@ -1,9 +1,4 @@
 {
-    "cSpell.words": [
-        "Attclearrs",
-        "nuxt",
-        "tbody",
-        "thead"
-    ],
-    "workbench.colorTheme": "Visual Studio Dark"
+  "cSpell.words": ["Attclearrs", "nuxt", "tbody", "thead", "vuetify"],
+  "workbench.colorTheme": "Visual Studio Dark"
 }

@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
+      <Nuxt />
     </v-main>
   </v-app>
 </template>
@@ -12,6 +10,6 @@
 export default {
   data() {
     return {};
-  }
+  },
 };
 </script>

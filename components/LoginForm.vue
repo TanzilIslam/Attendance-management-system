@@ -1,26 +1,26 @@
 <template>
   <div>
-    <div class="text-center my-4">
-      <h2>
-        Attendance Portal
-      </h2>
-    </div>
-    <v-row>
+    <v-row style="margin: 0px">
       <v-col
         cols="12"
-        sm="12"
-        md="6"
-        lg="6"
-        xl="6"
-        offset-md="3"
-        offset-lg="3"
-        offset-xl="3"
+        sm="4"
+        md="4"
+        lg="4"
+        xl="4"
+        offset-sm="4"
+        offset-md="4"
+        offset-lg="4"
+        offset-xl="4"
       >
-        <v-toolbar dense dark color="primary mt-4">
-          <v-toolbar-title>Login form</v-toolbar-title>
-        </v-toolbar>
-        <v-card class="px-4 py-4 elevation-12">
-          <v-card-text>
+        <v-card class="mt-5 px-4 py-4 elevation-12">
+          <v-card-text class="text-center">
+            <v-img
+              :src="require('@/assets/brand.png')"
+              height="120"
+              contain
+              class="mb-5"
+            ></v-img>
+            <h1 class="mb-5">Log In</h1>
             <v-form ref="loginForm" v-model="valid" lazy-validation>
               <v-text-field
                 dense
@@ -30,6 +30,7 @@
                 required
                 solo
                 outlined
+                prepend-inner-icon="mdi-gmail"
               ></v-text-field>
               <v-text-field
                 dense
@@ -44,19 +45,42 @@
                 @click:append="showPassword = !showPassword"
                 solo
                 outlined
+                prepend-inner-icon="mdi-lock"
               ></v-text-field>
             </v-form>
           </v-card-text>
-          <v-card-actions class="pb-4 ">
-            <v-btn
-              :loading="loading"
-              block
-              width="240"
-              :disabled="!valid"
-              color="primary"
-              @click="login"
-              >Login</v-btn
-            >
+          <v-card-actions class="pb-4">
+            <v-row>
+              <v-col cols="12">
+                <v-btn
+                  :loading="loading"
+                  block
+                  :disabled="!valid"
+                  color="primary"
+                  @click="login"
+                  >Login</v-btn
+                >
+                <hr class="mt-3" />
+                <p class="text-center pt-2">Or login as</p>
+                <hr />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-btn
+                  block
+                  color="primary"
+                  @click="defaultLogin('jon@gmail.com', '12345678')"
+                  ><v-icon>mdi-account</v-icon> Admin</v-btn
+                >
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-btn
+                  block
+                  color="primary"
+                  @click="defaultLogin('david@gmail.com', '12345678')"
+                  ><v-icon>mdi-account-group</v-icon> User</v-btn
+                >
+              </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -74,17 +98,17 @@ export default {
     password: "",
     showPassword: false,
     emailRules: [
-      v => !!v || "Email is Required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      (v) => !!v || "Email is Required",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
     rules: {
-      required: value => !!value || "Password is Required",
-      min: v => (v && v.length >= 8) || "Min 8 characters"
+      required: (value) => !!value || "Password is Required",
+      min: (v) => (v && v.length >= 8) || "Min 8 characters",
     },
     loading: false,
     showSnackbar: false,
     snackbarColor: "error",
-    snackbarText: "User Not Found"
+    snackbarText: "User Not Found",
   }),
   methods: {
     async login() {
@@ -93,23 +117,28 @@ export default {
         self.loading = true;
         let userInfo = {
           email: this.email,
-          password: this.password
+          password: this.password,
         };
         await this.$store
           .dispatch("users/login", userInfo)
-          .then(e => {
+          .then((e) => {
             if (e == "User Not Found") {
               self.showSnackbar = true;
             } else {
               self.$router.push("/dashboard");
             }
           })
-          .catch(e => {
+          .catch((e) => {
             self.showSnackbar = true;
           });
         self.loading = false;
       }
-    }
-  }
+    },
+    async defaultLogin(e, p) {
+      this.email = e;
+      this.password = p;
+      this.login();
+    },
+  },
 };
 </script>

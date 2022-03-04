@@ -47,9 +47,7 @@
         v-model="goDark"
       ></v-switch>
       <v-btn dense icon @click="logout">
-        <v-icon color="primary">
-          mdi-logout
-        </v-icon>
+        <v-icon color="primary"> mdi-logout </v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -89,28 +87,28 @@ export default {
         {
           icon: "mdi-account-clock",
           title: "Time Sheet",
-          to: "/timeSheet"
-        }
+          to: "/timeSheet",
+        },
       ],
       itemsAdmin: [
         {
           icon: "mdi-account-group",
           title: "Users",
-          to: "/users"
+          to: "/users",
         },
         {
           icon: "mdi-account-clock",
           title: "Time Sheet",
-          to: "/timeSheet"
+          to: "/timeSheet",
         },
         {
           icon: "mdi-chart-box",
           title: "Report",
-          to: "/report"
-        }
+          to: "/report",
+        },
       ],
       miniVariant: false,
-      right: true
+      right: true,
     };
   },
   methods: {
@@ -122,7 +120,7 @@ export default {
       Cookie.remove("uid");
       Cookie.remove("role");
       this.$router.push("/");
-    }
-  }
+    },
+  },
 };
 </script>
