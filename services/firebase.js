@@ -4,12 +4,13 @@ import "firebase/firestore";
 import "firebase/storage";
 
 const config = {
-  apiKey: "AIzaSyBcz35V8aOqeBjaxBG7jclE_k3PCOz0XjU",
-  authDomain: "candidate-tanzil-islam.firebaseapp.com",
-  projectId: "candidate-tanzil-islam",
-  storageBucket: "candidate-tanzil-islam.appspot.com",
-  messagingSenderId: "158052982597",
-  appId: "1:158052982597:web:898f444117487a6703a82c",
+  apiKey: "AIzaSyC9r3tuO7k8wJn9HJmXwQlObodQ1dbsHXs",
+  authDomain: "tanzil-tgkd.firebaseapp.com",
+  projectId: "tanzil-tgkd",
+  storageBucket: "tanzil-tgkd.firebasestorage.app",
+  messagingSenderId: "713350297757",
+  appId: "1:713350297757:web:ac2e8042700f80e3c03c74",
+  measurementId: "G-RMS0NVHYDX",
 };
 !firebase.apps.length ? firebase.initializeApp(config) : "";
 export const db = firebase.firestore();
