@@ -14,10 +14,10 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
   css: ["@/assets/main.css"],
-  plugins: [
-    { src: "~/plugins/gtm.js", ssr: false },
-    { src: "~/plugins/gta.js", ssr: false },
-  ],
+  // plugins: [
+  //   { src: "~/plugins/gtm.js", ssr: false },
+  //   { src: "~/plugins/gta.js", ssr: false },
+  // ],
   router: {
     // middleware: ["authenticated"]
   },
@@ -49,8 +49,5 @@ export default {
   build: {},
   generate: {
     fallback: true,
-  },
-  googleAnalytics: {
-    id: "G-F73B104ER2",
-  },
+  }
 };
