@@ -1,20 +1,14 @@
-# Attendance Management System Nuxt + firebase
+# Time Tracking Dashboard
 
-## Build Setup
+A modern attendance management system built with Vue.js and Firebase.
 
-```bash
-# install dependencies
-$ npm install
+## 📺 Demo Video
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+[![Watch Demo](https://img.youtube.com/vi/B68t2CLGWs4/0.jpg)](https://www.youtube.com/watch?v=B68t2CLGWs4)
 
-# build for production and launch server
-$ npm run build
-$ npm run start
 
-# generate static project
-$ npm run generate
-```
+## 🛠 Tech Stack
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+- **Frontend Framework**: Nuxt.js
+- **Backend/Database**: Firebase
+- **Styling**: Vuetify
